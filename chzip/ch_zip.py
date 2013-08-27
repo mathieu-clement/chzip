@@ -60,6 +60,8 @@ class ChZip:
         return names
 
     def all(self):
+        """Returns all the localities from the database, 
+        in no particular order."""
         db = chzip.zipcodes.ZipCodesDatabase(
             join(self.resource_dir,
                  chzip.zipcodes.ZipCodesDatabase.DEFAULT_FILENAME))
