@@ -39,7 +39,7 @@ long (27 chars) name:
 
 .. testcode::
 
-    > results = z.find( zip=1696 )
+    > results = z.find(1696)
     [<Locality[short_name='Vuisternens-Ogoz',
               long_name='Vuisternens-en-Ogoz',
               canton='FR']>]
