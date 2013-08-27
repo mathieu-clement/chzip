@@ -3,24 +3,30 @@
 Installation
 ============
 
-The recommended installation method is `pip <http://www.pip-installer.org/>`_::
+Manually
+--------
+
+Download the latest version from `PyPI <https://pypi.python.org/pypi?name=chzip&:action=display>`_
+and install using::
+
+    tar zxvf chzip-0.1.tar.gz
+    cd chzip-0.1/
+    sudo python setup.py install
+
+Using `pip`
+-----------
+
+You can also install it with `pip <http://www.pip-installer.org/>`_::
 
     pip install chzip
 
-This will automatically install the library and download all the resources files 
-required by this library. It can also be done manually at anytime::
-
-    import chzip
-    chzip.download_and_unpack_all(download_dir)
-
 .. warning::
 
-    :py:meth:`chzip.ChZip.download_and_unpack_all` erases previous versions of the
-    files before beginning, which can result in the absence of files if the download
-    or unpacking process fails. For this reason, you should always use 
-    :py:meth:`chzip.ChZip.upgrade_all` instead.
+    Installation with pip seems broken. If you have trouble with this method, 
+    perform the installation manually.
 
-.. note::
+Using `easy_install`
+--------------------
 
-     For `many reasons <http://stackoverflow.com/a/3220572/753136>`_ I do not plan
-     to make an egg for `easy_install`. But feel free to do it :-)
+I do not recommend (for `these reasons <http://stackoverflow.com/a/3220572/753136>`_) to use
+`easy_install`.

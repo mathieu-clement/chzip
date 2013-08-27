@@ -10,3 +10,4 @@ __pycache__
 MANIFEST
 dist
 build
+output.html
