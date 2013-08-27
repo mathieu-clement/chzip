@@ -44,7 +44,7 @@ def download_and_unpack_all(download_dir=chzip.ch_zip._default_res_dir()):
     chzip.zipcodes.Downloader.download_and_unpack(
         chzip.zipcodes.Downloader(), download_dir)
 
-def upgrade_all(download_dir=chzip.ch_zip._default_res_dir()):
+def upgrade_all(download_dir=chzip.ch_zip._default_res_dir(), force=False):
     """Upgrade all resources.
 
     :py:meth:`download_all` must have been called at least once, otherwise
@@ -61,10 +61,11 @@ def upgrade_all(download_dir=chzip.ch_zip._default_res_dir()):
     :param str download_dir: Download directory (with write permission)
                              containing previous versions of the resource
                              files.
+    :param bool force: Force upgrade, even if files are up-to-date.
 
     :raises: UpgradeException, DownloadException, UnpackingException
     """
     chzip.zipcodes.Downloader.upgrade_and_unpack(
-        chzip.zipcodes.Downloader(), download_dir)
+        chzip.zipcodes.Downloader(), download_dir, force)
 
 from . import *

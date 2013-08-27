@@ -40,7 +40,13 @@ class Downloader(chzip.common.Downloader):
                                           ZipCodesDatabase.DEFAULT_FILENAME))
             inst.delete()
 
-    def upgrade_and_unpack(self, download_dir):
+    def upgrade_and_unpack(self, download_dir, force=False):
+        if self._is_up_to_date and not force:
+            print('chzip is already up-to-date, then do upgrade will be done. '
+                  'You can force it to upgrade by setting the \'force\' argument '
+                  'to True.')
+            return
+
         for filename in self.files:
             inst = self._download_and_unzip(filename, download_dir)
             # Transform raw text file to a SQLite3 database
