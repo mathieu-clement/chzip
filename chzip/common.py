@@ -6,7 +6,15 @@
 # Needed for abstract classes / methods
 from abc import ABCMeta, abstractmethod
 
-from urllib.request import urlopen
+# Support Python 2 and 3
+try:
+    # Python 3
+    from urllib.request import urlopen
+except ImportError:
+    # Python 2
+    from urllib2 import urlopen
+
+
 import os
 import datetime
 
