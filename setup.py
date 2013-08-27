@@ -23,8 +23,19 @@ setup(
     # Metadata
     name='chzip',
     version='0.1',
-    description='Query Switzerland ZIP codes from Python',
-    long_description='The chzip package provides a quick and easy Python interface to look for zip codes and cities in Switzerland.',
+    description='Switzerland ZIP codes and town names',
+    long_description="""
+What is it?
+===========
+
+The chzip package provides a quick and easy Python interface to look for 
+zip codes and cities in Switzerland.
+    
+Documentation
+=============
+
+Read the docs on `ReadTheDocs <http://chzip.readthedocs.org>`_ :-)
+""",
     author='Mathieu Clément',
     author_email='mathieu.clement@freebourg.org',
     url='https://bitbucket.org/freebourg/chzip',
