@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Common classes and utilities functions."""
+"""Common classes and utilities functions"""
 
 # Needed for abstract classes / methods
 from abc import ABCMeta, abstractmethod
@@ -131,7 +131,7 @@ class Locality:
     """A ZIP code might be only available for PO boxes, physical adresses,
     both of these, an entreprise, or dedicated for mail sorting.
 
-    .. seealso:: :py:meth:`chzip.ZipType`"""
+    .. seealso:: :py:meth:`chzip.common.ZipType`"""
 
     # Secondary (least important) fields
 

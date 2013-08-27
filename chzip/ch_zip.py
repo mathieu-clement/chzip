@@ -19,6 +19,11 @@ class ChZip:
     """The main entry point of the `chzip` library."""
 
     def __init__(self, resource_dir=_default_res_dir()):
+        """__init__(resource_dir='chzip/install/path/res')
+
+        :param str resource_dir: Resource directory
+        """
+
         self.resource_dir = resource_dir
 
     def find(self,
@@ -26,9 +31,9 @@ class ChZip:
              # Exact matches
              long_name=None, short_name=None,
              # "contains" or SQL LIKE expression
-             long_name_like=None, short_name_like=None,
+             # long_name_like=None, short_name_like=None,
              canton=None, onrp=None):
-        """Refer to the :ref:`Usage`."""
+        """Refer to :ref:`Usage`."""
         if long_name_like or short_name_like:
             raise NotImplementedError('Sorry, the LIKE feature is not '
                                       'implemented yet')
@@ -43,6 +48,16 @@ class ChZip:
         localities = db.query(dic)
         del db
         return localities
+
+    def long_names(self, *args, **kwargs):
+        """Is the same as :py:meth:`find` but returns a list of long names 
+        instead."""
+        results = self.find(*args, **kwargs)
+        names = []
+        for result in results:
+            names.append(result.long_name)
+
+        return names
 
     def all(self):
         db = chzip.zipcodes.ZipCodesDatabase(

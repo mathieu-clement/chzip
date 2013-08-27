@@ -22,7 +22,7 @@ It contains all the files needed for this library to work.
 It can be set manually by calling the constructor with the absolute path
 as argument.
 
-It defaults to the `res` directory inside the installation path.
+It defaults to the `res/` directory inside the installation path.
 If changed, you will need to call 
 :py:meth:`chzip.ChZip.download_and_unpack_all` once, and 
 :py:meth:`chzip.ChZip.upgrade_all` after that.
@@ -50,7 +50,8 @@ long (27 chars) name:
 ..    > results[0]['long_name']
 ..    "Vuisternens-en-Ogoz"
 
-Display, print and use the long name if possible in your app.
+.. note::
+    If possible, always use the long name.
 
 
 Get all locality *names* matching a ZIP code
@@ -61,11 +62,11 @@ the long name of localities, you can use this little snippet of code::
 
     z.long_names( zip=1696 )
 
-The same goes for the short names. Of course you can use all the filters from
-the :py:meth:`chzip.ChZip.find` method as explained below.
+.. The same goes for the short names. Of course you can use all the filters from
+.. the :py:meth:`chzip.ChZip.find` method as explained below.
 
-.. seealso::  :py:attr:`chzip.Locality.long_name` and 
-    :py:attr:`chzip.Locality.short_name`
+.. seealso::  :py:attr:`chzip.common.Locality.short_name` and 
+    :py:attr:`chzip.common.Locality.long_name`
     to understand the difference of both formats.
 
 

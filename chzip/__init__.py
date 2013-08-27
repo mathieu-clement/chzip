@@ -29,7 +29,9 @@ import chzip.zipcodes
 # TODO Update documentation acccordingly
 
 def download_and_unpack_all(download_dir=chzip.ch_zip._default_res_dir()):
-    """Download and unpack all (available) resources.
+    """download_and_unpack_all(download_dir='chzip/install/path/res')
+    
+    Download and unpack all (available) resources.
 
     Use :py:meth:`upgrade_all` if you don't want to re-download
     everything but only update what has changed.
@@ -38,18 +40,22 @@ def download_and_unpack_all(download_dir=chzip.ch_zip._default_res_dir()):
 
     :param str download_dir: Download directory (with write permissions)
 
-    :raises: exceptions.DownloadException, UnpackingException
+    .. :raises: :py:meth:`chzip.exceptions.DownloadException`, 
+    ..          :py:meth:`chzip.exceptions.UnpackingException`
+
+    .. note::
+        You are very unlikely to ever call this method, except if you included
+        chzip directly in your project, without installing it.
 
     """
     chzip.zipcodes.Downloader.download_and_unpack(
         chzip.zipcodes.Downloader(), download_dir)
 
 def upgrade_all(download_dir=chzip.ch_zip._default_res_dir(), force=False):
-    """Upgrade all resources.
+    """upgrade_all(download_dir='chzip/install/path/res', force=False)
+    
+    Upgrade all resources.
 
-    :py:meth:`download_all` must have been called at least once, otherwise
-    this method will throw an :py:exc:`UpgradeException`.
-    (Note that `distutils` should have done it at installation.)
     Unlike `download_all` resources files that have not been changed will
     not be erased and downloaded again.
     Also, it takes care of keeping old (working) files if the upgrade fails
@@ -63,7 +69,7 @@ def upgrade_all(download_dir=chzip.ch_zip._default_res_dir(), force=False):
                              files.
     :param bool force: Force upgrade, even if files are up-to-date.
 
-    :raises: UpgradeException, DownloadException, UnpackingException
+    .. :raises: UpgradeException, DownloadException, UnpackingException
     """
     chzip.zipcodes.Downloader.upgrade_and_unpack(
         chzip.zipcodes.Downloader(), download_dir, force)

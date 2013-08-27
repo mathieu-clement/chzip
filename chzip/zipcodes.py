@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""Implementation classes that do the heavy lifting of the module"""
+
 import datetime
 import shutil
 import os
@@ -9,6 +11,7 @@ import chzip.common
 
 
 class Downloader(chzip.common.Downloader):
+    """The Downloader of Swiss Post MAT[CH] ZIP resources."""
     # Output name of the downloaded files (without extension)
     # and the direct URL for download
     files = {
@@ -30,6 +33,12 @@ class Downloader(chzip.common.Downloader):
         return inst
 
     def download_and_unpack(self, download_dir):
+        """Downloads the ZIP files from MAT[CH], extract the 
+        text file, populate the internal SQLite3 database,
+        and delete all the intermediary files.
+        
+        :param str download_dir: Resource directory that will contain both the temporary
+                                 files (which will be deleted) and the database."""
         for filename in self.files:
             inst = self._download_and_unzip(filename, download_dir)
             inst.install()
@@ -41,7 +50,15 @@ class Downloader(chzip.common.Downloader):
             inst.delete()
 
     def upgrade_and_unpack(self, download_dir, force=False):
-        if self._is_up_to_date and not force:
+        """Does the same as :py:meth:`download_and_unpack`
+        but returns immediately if files are up-to-date and do not delete previous
+        database. This can be handy in cases of failure, so is the recommended way
+        to update the database.
+        
+        :param str download_dir: Resource directory that will contain both the temporary
+                             files (which will be deleted) and the database.
+        :param bool force: Set to true to force update even if files are up-to-date."""
+        if self.is_up_to_date and not force:
             print('chzip is already up-to-date, then do upgrade will be done. '
                   'You can force it to upgrade by setting the \'force\' argument '
                   'to True.')
@@ -59,7 +76,8 @@ class Downloader(chzip.common.Downloader):
                         os.path.join(download_dir, ZipCodesDatabase.DEFAULT_FILENAME))
             inst.delete()
 
-    def _is_up_to_date(self, abs_resource_file):
+    def is_up_to_date(self, abs_resource_file):
+        """:returns: true if the specified file is up-to-date."""
         # ZIP codes files are up-to-date if lastly modified in the current month
         return self._get_lastchange_datetime(
             abs_resource_file).month == datetime.datetime.now().month
@@ -80,7 +98,7 @@ class ResourceInstaller:
     """Unzip the file downloaded from Swiss Post and install it at the
     appropriate location.
 
-    Usage: call ``unzip`` and ``install`` for a complete installation."""
+    Usage: call :py:meth:`unzip` and :py:meth:`install` for a complete installation."""
 
     def __init__(self, zip_path, extract_dir, extract_to_filename):
         self.zip_path = zip_path
@@ -91,7 +109,8 @@ class ResourceInstaller:
 
     def unzip(self):
         """Unzip the first file from ZIP to the specified directory
-        Returns the filename extracted"""
+        
+        :returns: the filename extracted"""
 
         with zipfile.ZipFile(self.zip_path) as zip:
             first_filename = zip.namelist()[0]
@@ -106,21 +125,21 @@ class ResourceInstaller:
         self.installed = True
 
     def wanted_path(self):
-        """Returns the desired path of the extracted text file."""
+        """:returns: the desired path of the extracted text file."""
         return os.path.join(self.extract_dir, self.wanted_extracted_name)
 
     def real_path(self):
-        """Returns the path of the extracted text file, before moving it.
+        """:returns: the path of the extracted text file, before moving it.
+
         So this is the real path of the file just after unzipping.
 
         If you want to work on the file before installing, call this method
-        else call `wanted_path`. `extracted_txt_path` will figure this out
-        for you."""
+        else call :py:meth:`wanted_path`. :py:meth:`extracted_txt_path` will 
+        figure this out for you."""
         return os.path.join(self.extract_dir, self.really_extracted_filename)
 
     def extracted_txt_path(self):
-        """Always returns the location of the text file, no matter if `install`
-        was called or not."""
+        """:returns: always returns the location of the text file, no matter if :py:meth:`install` was called or not."""
         if self.installed:
             return self.wanted_path()
         else:

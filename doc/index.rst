@@ -15,8 +15,7 @@ Contents:
    installation
    data_upgrade
    usage
-
-
+   chzip_module
 
 Indices and tables
 ==================
