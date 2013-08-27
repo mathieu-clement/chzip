@@ -102,10 +102,10 @@ as previously.
     of memory. You may be served better with the `all` method as explained here:
     :ref:`all_method`.
 
-.. note:: 
-
-    You can use a SQL *LIKE* expressions (e.g. ``%le-Château`` for names ending with
-    "le-Château").
+.. .. note:: 
+.. 
+..     You can use a SQL *LIKE* expressions (e.g. ``%le-Château`` for names ending with
+..     "le-Château").
 
 .. _all_method:
 
