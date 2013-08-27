@@ -20,6 +20,8 @@ __author__ = 'Mathieu Clément'
 #         raise Exception(str(f) + ' can NOT be opened.')
 
 
+import os
+from warnings import warn
 
 from chzip.ch_zip import ChZip
 from chzip.common import Locality, ZipType
@@ -48,6 +50,10 @@ def download_and_unpack_all(download_dir=chzip.ch_zip._default_res_dir()):
         chzip directly in your project, without installing it.
 
     """
+    try:
+        os.makedirs(download_dir)
+    except:
+        print(download_dir + ' already exists. upgrade_all() may be what you are looking for.')
     chzip.zipcodes.Downloader.download_and_unpack(
         chzip.zipcodes.Downloader(), download_dir)
 

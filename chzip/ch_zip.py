@@ -34,9 +34,9 @@ class ChZip:
              # long_name_like=None, short_name_like=None,
              canton=None, onrp=None):
         """Refer to :ref:`Usage`."""
-        if long_name_like or short_name_like:
-            raise NotImplementedError('Sorry, the LIKE feature is not '
-                                      'implemented yet')
+#        if long_name_like or short_name_like:
+#            raise NotImplementedError('Sorry, the LIKE feature is not '
+#                                      'implemented yet')
 
         db = chzip.zipcodes.ZipCodesDatabase(
             join(self.resource_dir,

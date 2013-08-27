@@ -40,13 +40,17 @@ class Downloader(chzip.common.Downloader):
         :param str download_dir: Resource directory that will contain both the temporary
                                  files (which will be deleted) and the database."""
         for filename in self.files:
+            db_path = os.path.join(download_dir, ZipCodesDatabase.DEFAULT_FILENAME)
+            try:
+                os.remove(db_path)
+            except:
+                pass
+
             inst = self._download_and_unzip(filename, download_dir)
             inst.install()
 
             # Transform raw text file to a SQLite3 database
-            self._to_sqlite3(inst.extracted_txt_path(),
-                             os.path.join(download_dir,
-                                          ZipCodesDatabase.DEFAULT_FILENAME))
+            self._to_sqlite3(inst.extracted_txt_path(), db_path)
             inst.delete()
 
     def upgrade_and_unpack(self, download_dir, force=False):
@@ -196,7 +200,11 @@ class ZipCodesDatabase:
                 'db_path or csv_path + db_path must be provided.')
 
     def _open(self):
-        self.conn = sqlite3.connect(self.db_path)
+        try:
+            self.conn = sqlite3.connect(self.db_path)
+        except sqlite3.OperationalError as err:
+            raise Exception('Cannot open database %s. Did you call '
+            'chzip.download_and_unpack_all() ?' % self.db_path)
 
     def _create_db(self):
         self._open()

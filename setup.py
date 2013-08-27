@@ -1,11 +1,28 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 from distutils.core import setup
 
+# Post install command
+# http://stackoverflow.com/a/1321345/753136
+from distutils.command.install import install
+
+import os
+import distutils.sysconfig
+
+class post_install(install):
+    def run(self):
+        install.run(self)
+
+        res_dir = os.path.join(distutils.sysconfig.get_python_lib(), 'chzip', 'res')
+        print('Downloading and installing the zip codes database to %s ...' % res_dir)
+        import chzip
+        chzip.download_and_unpack_all(res_dir)
+
 setup(
     # Metadata
-    name='Switzerland ZIP codes (chzip)',
-    version='1.0',
+    name='chzip',
+    version='0.1',
     description='Query Switzerland ZIP codes from Python',
     long_description='The chzip package provides a quick and easy Python interface to look for zip codes and cities in Switzerland.',
     author='Mathieu Clément',
@@ -17,11 +34,14 @@ setup(
                  'Operating System :: OS Independent',
                  'License :: OSI Approved :: BSD License',
                  'Intended Audience :: Customer Service',
-                 'Intended Audience :: Telecommunications Industry']
-    license='BSD'
+                 'Intended Audience :: Telecommunications Industry'],
+    license='BSD',
 
     # What's included
-    py_modules=['chzip'],
+    packages=['chzip'],
     package_dir={'chzip': 'chzip'},
-    packages_data={'chzip': ['test_resources']}
+#    package_data={'chzip': ['test_resources']},
+
+    # Post install command
+    cmdclass={'install': post_install},
     )
