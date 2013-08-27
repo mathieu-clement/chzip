@@ -1,6 +1,5 @@
 *.pyo
 *.pyc
-*.db
 *.zip
 __pycache__
 .idea
