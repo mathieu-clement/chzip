@@ -10,3 +10,8 @@ Documentation
 -------------
 The documentation of this project can be found on 
 [ReadTheDocs](http://chzip.readthedocs.org/).
+
+Download
+--------
+You can download this library from 
+[PyPI](https://pypi.python.org/pypi?name=chzip&:action=display).
