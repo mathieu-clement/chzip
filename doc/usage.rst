@@ -24,8 +24,8 @@ as argument.
 
 It defaults to the `res/` directory inside the installation path.
 If changed, you will need to call 
-:py:meth:`chzip.ChZip.download_and_unpack_all` once, and 
-:py:meth:`chzip.ChZip.upgrade_all` after that.
+:py:meth:`chzip.download_and_unpack_all` once, and 
+:py:meth:`chzip.upgrade_all` after that.
 
 
 .. _all-localities-matching-a-zip-code:
@@ -34,7 +34,7 @@ Get all localities matching a ZIP code
 ---------------------------------------
 
 Example for ZIP code 1696, giving one result, i.e. one
-:py:class:`chzip.Locality`, with a different short (18 chars) and
+:py:class:`chzip.common.Locality`, with a different short (18 chars) and
 long (27 chars) name:
 
 .. testcode::
