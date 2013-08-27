@@ -67,7 +67,7 @@ the long name of localities, you can use this little snippet of code::
 
 .. seealso::  :py:attr:`chzip.common.Locality.short_name` and 
     :py:attr:`chzip.common.Locality.long_name`
-    to understand the difference of both formats.
+    to understand the difference between these two formats.
 
 
 Find localities matching the exact name
@@ -112,10 +112,7 @@ as previously.
 Get all localities (no search criteria)
 ---------------------------------------
 
-Because the data set may be pretty big, the :py:meth:`chzip.ChZip.all` method
-returns an iterator.
-
-Use it as following::
+:py:meth:`chzip.ChZip.all` may be used to fetch all the data::
 
     for locality in z.all():
         do_something_with( locality )
