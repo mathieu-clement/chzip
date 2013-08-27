@@ -31,7 +31,7 @@ implement a custom solution from scratch.
 This library has been developed with its users in mind, and I am
 looking forward for your feedback and your usecases.
 
-The most important thing I would like to achive is that you can
+The most important thing I would like to archive is that you can
 install chzip and look for locality names associated with a zip code
 under a minute. Look at the :ref:`usage` page and try this thing out,
 then tell me if I have succeeded.
