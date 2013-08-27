@@ -9,4 +9,4 @@ Feel free to contribute and give your feedback.
 Documentation
 -------------
 The documentation of this project can be found on 
-[ReadTheDocs](http://www.readthedocs.org/)
+[ReadTheDocs](http://chzip.readthedocs.org/).
