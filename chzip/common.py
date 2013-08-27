@@ -40,7 +40,7 @@ class Downloader:
 
     @abstractmethod
     def upgrade_and_unpack(self, download_dir):
-        """Similar to :py:meth:`chzip.common.Downloader.download_and_unpack`
+        """Similar to :py:meth:`download_and_unpack`
         but does not do anything if files are up-to-date and does not let you
         with a broken installation in case of a download or unpacking failure.
         """
@@ -131,7 +131,7 @@ class Locality:
     """A ZIP code might be only available for PO boxes, physical adresses,
     both of these, an entreprise, or dedicated for mail sorting.
 
-    .. seealso:: :py:meth:`chzip.common.ZipType`"""
+    .. seealso:: :py:meth:`ZipType`"""
 
     # Secondary (least important) fields
 
