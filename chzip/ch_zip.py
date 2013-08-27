@@ -16,7 +16,7 @@ def _default_res_dir():
 
 
 class ChZip:
-    """The main entry point of the `chzip` library."""
+    """The main entrance for the `chzip` library."""
 
     def __init__(self, resource_dir=_default_res_dir()):
         """__init__(resource_dir='chzip/install/path/res')
