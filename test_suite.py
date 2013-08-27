@@ -58,13 +58,7 @@ class FindTestCases(unittest.TestCase):
             if locality._onrp == onrp:
                 return locality
 
-    def test_zip(self):
-        results = self.chzip.find(1003)
-        # Should have three results
-        self.assertEqual(3, len(results))
-
-        parking_centre = self.__find_onrp(9036, results)
-
+    def __test_parking_centre(self, parking_centre):
         self.assertEqual(parking_centre._onrp, 9036)
         self.assertEqual(parking_centre._zip_type_number, 80)
         self.assertEqual(parking_centre.zip_type, chzip.common.ZipType.INTERNAL)
@@ -73,14 +67,34 @@ class FindTestCases(unittest.TestCase):
         self.assertEqual(parking_centre.long_name, 'Lausanne Parking du Centre')
         self.assertEqual(parking_centre.canton, 'VD')
 
+    def test_zip(self):
+        results = self.chzip.find(1003)
+        # Should have three results
+        self.assertEqual(3, len(results))
+
+        parking_centre = self.__find_onrp(9036, results)
+        self.__test_parking_centre(parking_centre)
+
+
+    def test_zip_and_onrp(self):
+        results = self.chzip.find(1003, onrp=9036)
+        # Should have one result
+        self.assertEqual(1, len(results))
+        self.__test_parking_centre(results[0])
+
     def test_equality(self):
         loc1 = chzip.Locality(zip=1234, short_name='this is short',
-                              long_name='this is long', onrp=2525, canton='AB',
-                              zip_type_number=10)
+                              long_name='this is long', _onrp=2525, canton='AB',
+                              _zip_type_number=10)
         loc2 = chzip.Locality(zip=1234, short_name='this is short',
-                              long_name='this is long', onrp=2525, canton='AB',
-                              zip_type_number=10)
+                              long_name='this is long', _onrp=2525, canton='AB',
+                              _zip_type_number=10)
         self.assertEqual(loc1, loc2)
+
+        loc3 = chzip.Locality(zip=1234, short_name='this is short',
+                              long_name='this is long', _onrp=2525, canton='AB',
+                              _zip_type_number=20)  # little change
+        self.assertNotEqual(loc1, loc3)
 
 
 unittest.defaultTestLoader.discover('chzip')
