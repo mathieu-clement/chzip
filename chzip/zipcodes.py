@@ -36,7 +36,8 @@ class Downloader(chzip.common.Downloader):
 
             # Transform raw text file to a SQLite3 database
             self._to_sqlite3(inst.extracted_txt_path(),
-                             os.path.join(download_dir, filename + '.db'))
+                             os.path.join(download_dir,
+                                          ZipCodesDatabase.DEFAULT_FILENAME))
             inst.delete()
 
     def upgrade_and_unpack(self, download_dir):
@@ -49,7 +50,7 @@ class Downloader(chzip.common.Downloader):
             # at the end.
             inst.install()
             shutil.move(os.path.join(download_dir, filename + '.new.db'),
-                        os.path.join(download_dir, filename + '.db'))
+                        os.path.join(download_dir, ZipCodesDatabase.DEFAULT_FILENAME))
             inst.delete()
 
     def _is_up_to_date(self, abs_resource_file):
@@ -57,8 +58,11 @@ class Downloader(chzip.common.Downloader):
         return self._get_lastchange_datetime(
             abs_resource_file).month == datetime.datetime.now().month
 
-    def _to_sqlite3(self, txt_file, db_):
-        pass
+    def _to_sqlite3(self, txt_file, db_path):
+        # Create and fill database
+        db = ZipCodesDatabase(db_path, txt_file)
+        # Close database
+        del db  # or db.close()
 
 
 ### Unzipper - Installer
@@ -123,7 +127,10 @@ class ResourceInstaller:
                                self.wanted_extracted_name),
                   os.path.join(self.extract_dir,
                                self.really_extracted_filename)]:
-            self._delete(f)
+            try:
+                self._delete(f)
+            except OSError:
+                pass
 
     def _delete(self, file):
         os.remove(file)
@@ -138,7 +145,6 @@ from chzip.common import Locality
 
 
 class ZipCodesDatabase:
-
     DEFAULT_FILENAME = 'zipcodes.db'
 
     def __init__(self, db_path=None, csv_path=None):
@@ -176,19 +182,38 @@ class ZipCodesDatabase:
         self.conn.commit()
         cursor.close()
 
+    # def _slow_import(self, csv_path):  # creating objects
+    #                                      can be useful to test insert()
+    #     with codecs.open(csv_path, 'rb', 'iso-8859-1') as csvfile:
+    #         csv_reader = csv.reader(csvfile, delimiter='\t')
+    #         for row in csv_reader:
+    #             l = Locality()
+    #             l._onrp = int(row[0])
+    #             l._zip_type_number = int(row[1])
+    #             l.zip = int(row[2])
+    #             # row[3] is additional NPA number. Ignored.
+    #             l.short_name = row[4]
+    #             l.long_name = row[5]
+    #             l.canton = row[6]
+    #             self.insert(l)
+
+    # as import but avoids closing the connection and creating objects
     def _import(self, csv_path):
         with codecs.open(csv_path, 'rb', 'iso-8859-1') as csvfile:
-            csv_reader = csv.reader(csvfile, MatCHDialect())
+            csv_reader = csv.reader(csvfile, delimiter='\t')
+
+            cursor = self.conn.cursor()
+            items = []
+
             for row in csv_reader:
-                l = Locality()
-                l._onrp = row[0]
-                l._zip_type_number = row[1]
-                l.zip = row[2]
-                # row[3] is additional NPA number. Ignored.
-                l.short_name = row[3]
-                l.long_name = row[4]
-                l.canton = row[5]
-                self.insert(l)
+                item = (row[0], row[1], row[2], row[4], row[5], row[6])
+                items.append(item)
+
+            cursor.executemany("INSERT INTO zipcodes ("
+                               "onrp, type, zip, short_name, long_name, canton"
+                               ") values (?, ?, ?, ?, ?, ?)", items)
+            self.conn.commit()
+            cursor.close()
 
     # TODO: "with safe_cursor(self.conn) as cursor:"
     # to avoid creating the cursor, committing to DB and closing the cursor
@@ -220,7 +245,6 @@ class ZipCodesDatabase:
         else:
             cursor.execute('SELECT * from zipcodes')
 
-        cursor.execute('SELECT * from zipcodes')
         results = self._raw_list_to_locality_list(cursor)
         cursor.close()
         return results
@@ -234,7 +258,7 @@ class ZipCodesDatabase:
         for term in dic:
             value = dic[term]
             if value:
-                where_str = where_str + ' AND ' + term + '= ?'
+                where_str += ' AND ' + term + '= ?'
                 fields.append(value)
 
         return where_str, fields
@@ -249,10 +273,9 @@ class ZipCodesDatabase:
         l._zip_type_number = int(row[1])
         #l.zip_type done automatically by _zip_type_number setter
         l.zip = int(row[2])
-        l.short_name = int(row[3])
+        l.short_name = row[3]
         l.long_name = row[4]
-        l.long_name = row[5]
-        l.canton = row[6]
+        l.canton = row[5]
         return l
 
     def _raw_list_to_locality_list(self, iterable):
@@ -263,22 +286,12 @@ class ZipCodesDatabase:
             localities.append(self._row_to_locality(item))
         return localities
 
-    def close_db(self):
+    def close(self):
         """To close the database manually."""
-        self.conn.close()
+        try:
+            self.conn.close()
+        except:
+            pass
 
     def __del__(self):
-        self.close_db()
-
-
-# MAT[CH] ZIP Lite CSV Dialect
-# is not meant for writing
-
-class MatCHDialect(csv.Dialect):
-    delimiter = '\t'
-    #doublequote = False
-    #escapechar = ''
-    ## lineterminator = '\r\n' # default
-    #quotechar = ''
-    #skipinitialspace = True
-    # strict = False # default
+        self.close()

@@ -48,6 +48,7 @@ class Downloader:
         output_path = os.path.join(abs_download_dir, filename)
         output_f = open(output_path, 'wb')
         output_f.write(input_f.read())
+        output_f.close()
         return output_path
 
     # Method to be optionally implemented by subclasses
@@ -65,9 +66,41 @@ class Locality:
     that goes after the ZIP code in the address.
     """
 
+    def __init__(self, zip=0, short_name=None, long_name=None,
+                 canton=None, _zip_type_number=None, _onrp=None):
+        self.zip = zip
+        self.short_name = short_name
+        self.long_name = long_name
+        self.canton = canton
+        if _zip_type_number:
+            self._zip_type_number = _zip_type_number
+        self._onrp = _onrp
+
+    # Two localities are equal if they have the same attributes
+    def __eq__(self, other):
+        return isinstance(other, Locality) \
+                   and self.zip == other.zip \
+                   and self.short_name == other.short_name \
+                   and self.long_name == other.long_name \
+                   and self.canton == other.canton \
+                   and self._zip_type_number == other._zip_type_number \
+            and self._onrp == other._onrp
+
+    # Recommended resource: http://stackoverflow.com/a/2626364/753136
+    def __repr__(self):
+        return "Locality(zip=%r, short_name=%r, long_name=%r, canton=%r, " \
+               "_zip_type_number=%r, _onrp=%r)" % (self.zip, self.short_name,
+                                                   self.long_name, self.canton,
+                                                   self._zip_type_number,
+                                                   self._onrp)
+
+    def __str__(self):
+        # TODO May be improved
+        return self.__repr__()
+
     # Primary (most important) fields
 
-    zip = 0
+    zip = 0  # Warning: shadows the zip() built-in function
     """ZIP code"""
 
     short_name = None
@@ -102,11 +135,17 @@ class Locality:
     """A number telling the kind of ZIP code. This is internal stuff, see
     `_zip_type` for normal use."""
 
-    @_zip_type_number.setter
-    def zip_type_number(self, value):
-        self._zip_type_number = value
-        self.zip_type = ZipType._to_type(value)
+    # Where the value of the _zip_type_number property goes
+    __zip_type_number = None
 
+    @_zip_type_number.getter
+    def _zip_type_number(self):
+        return self.__zip_type_number
+
+    @_zip_type_number.setter
+    def _zip_type_number(self, value):
+        self.__zip_type_number = value
+        self.zip_type = ZipType._to_type(value)
 
 
 # TODO Use the Enum class with Python 3.4
@@ -154,5 +193,8 @@ class ZipType:
 
     # Convert number to type. Is used in de-serialization.
     @staticmethod
-    def _to_type(self, number):
-        return self._mapping[number]
+    def _to_type(number):
+        try:
+            return ZipType._mapping[number]
+        except KeyError as e:
+            print('The ZIP type number %d does not exist.' % (number,))

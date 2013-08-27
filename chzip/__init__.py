@@ -66,3 +66,5 @@ def upgrade_all(download_dir=chzip.ch_zip._default_res_dir()):
     """
     chzip.zipcodes.Downloader.upgrade_and_unpack(
         chzip.zipcodes.Downloader(), download_dir)
+
+from . import *
