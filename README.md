@@ -9,5 +9,6 @@ Feel free to contribute and give your feedback.
 Documentation
 -------------
 The documentation of this project can be found on 
-`ReadTheDocs <http://www.readthedocs.org/>`_
+ReadTheDocs_.
 
+.. _ReadTheDocs: http://www.readthedocs.org/
