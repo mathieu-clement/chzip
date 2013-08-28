@@ -1,5 +1,8 @@
-Check documentation at http://chzip.readthedocs.org/
+Check the documentation at http://chzip.readthedocs.org/
 
-This package is provided with the BSD license.
+For a very quick start:
 
-Copyright 2013 - Mathieu Clément
+    from chzip import *
+    ChZip().find(1200)
+
+Read the LICENSE file.
