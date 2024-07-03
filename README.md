@@ -1,6 +1,8 @@
 Switzerland ZIP codes (chzip)
 =============================
 
+**2024 Update: this project is now 11 years old. The Post website link doesn't work anymore, and this package relies on APIs removed from Python.**
+
 This open-source project provides an easy-to-use Python 3
 interface to access the ZIP codes data from Swiss Post (MAT[CH]).
 
